@@ -17,7 +17,6 @@
  *
  */
 
-
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include "playground.h"
