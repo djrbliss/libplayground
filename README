@@ -1,7 +1,7 @@
-****************************************************************
-* libplayground                                                *
-* A simple framework for developing Linux kernel heap exploits *
-****************************************************************
+**************************************************************************
+* libplayground                                                          *
+* A simple framework for developing Linux kernel heap exploit techniques *
+**************************************************************************
 
 Warning: this will deliberately introduce vulnerabilities into your kernel for
 the purposes of exploit development. Additionally, use of this module may, by
