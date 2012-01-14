@@ -22,6 +22,22 @@ will invoke whichever slab layer is running on the testing kernel.  At the time
 of this writing, SLUB is the default allocator, but other allocators, such as
 SLAB or SLOB, may be configured at compile time.
 
+The pointers to chunks allocated using libplayground are stored in an array and
+can be accessed by referring to the "slot" the chunk pointer is stored in.  For
+example, to allocate a 32-byte chunk and store its pointer in slot 200, you can
+call:
+
+	kmalloc(200, 32);
+
+It's important to remember that the slot numbers just represent numeric
+identifiers that will allow you to keep track of heap chunks you're
+manipulating; think of them as handles to kernel heap chunks.  The order in
+which the chunk pointers are stored in the libplayground array has nothing to
+do with the order of the actual chunks in memory.  Slots 32 and 33 may point to
+chunks living in entirely different parts of the kernel heap.  If you want to
+cause kernel heap allocations to be sequential, you'll have to do that yourself
+by manipulating the behavior of the allocator with your allocations.
+
 The module can be built using a simple "make", and loaded into the kernel using
 "insmod playground.ko".
 
