@@ -1,0 +1,41 @@
+****************************************************************
+* libplayground                                                *
+* A simple framework for developing Linux kernel heap exploits *
+****************************************************************
+
+Warning: this will deliberately introduce vulnerabilities into your kernel for
+the purposes of exploit development. Additionally, use of this module may, by
+design, cause corruption of kernel heap memory that may impact system
+stability, including the integrity of files stored on disk. It is highly
+recommended that all testing be performed on a disposable virtual machine.
+
+libplayground is composed of two parts. A Linux kernel module, located in
+module/, creates a device file at /dev/playground.  This device file supports
+ioctls designed to simulate various exploitation primitives useful when
+developing Linux kernel heap exploits.  Currently supported is the ability to
+allocate and free heap chunks, the ability to read and write arbitrary data to
+and from specific heap chunks (for example to simulate a heap overflow), the
+ability to cause a double-free of a heap chunk, and the ability to trigger the
+invocation of a function pointer stored at a specified offset from the
+beginning of a heap chunk.  All chunks are allocated using kmalloc(), which
+will invoke whichever slab layer is running on the testing kernel.  At the time
+of this writing, SLUB is the default allocator, but other allocators, such as
+SLAB or SLOB, may be configured at compile time.
+
+The module can be built using a simple "make", and loaded into the kernel using
+"insmod playground.ko".
+
+To make interacting with this kernel module a little easier, a simple userland
+library is included in lib/.  After building and installing this library and
+its associated header file ("make install"), test cases may be built against it
+by including "<playground.h>" and linking against the library.  An example
+provided in examples/ can be built as follows:
+
+	gcc chunk-growth.c -o chunk-growth -lplayground
+
+Or, if you built the library but didn't install it:
+
+	gcc chunk-growth.c -o chunk-growth -I../lib/ -L../lib/ -lplayground
+
+Take a look at lib/playground.h and the example for the provided functions and
+usage.  Happy hacking!
