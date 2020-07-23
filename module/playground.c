@@ -24,7 +24,7 @@
  */
 
 #include "playground.h"
-#include <asm/uaccess.h>
+#include <linux/uaccess.h> 
 #include <linux/fs.h>
 #include <linux/kernel.h>
 #include <linux/errno.h>
@@ -33,6 +33,9 @@
 #include <linux/cred.h>
 #include <linux/slab.h>
 #include <linux/sched.h>
+#include <linux/module.h>
+
+
 
 static void *playground[PLAYGROUND_SIZE];
 
@@ -174,9 +177,7 @@ static void __exit playground_exit(void)
 {
 	int ret;
 
-	ret = misc_deregister(&playground_misc);
-	if (unlikely(ret))
-		printk(KERN_ERR "playground: failed to unregister misc device\n");
+	misc_deregister(&playground_misc);
 
 	for (ret = 0; ret < PLAYGROUND_SIZE; ret++) {
 		if (playground[ret]) {
